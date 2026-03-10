@@ -2,40 +2,44 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>METRO TYCOON v46 - CLASSIC</title>
+    <title>METRO TYCOON v47 - BALANCED</title>
     <style>
         :root { --bg: #0f172a; --panel: #1e293b; --accent: #38bdf8; --gold: #fbbf24; --success: #22c55e; --danger: #f43f5e; --purple: #8b5cf6; }
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body { background: var(--bg); color: white; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        body { background: var(--bg); color: white; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
 
-        .app-container { position: relative; background: #111827; padding: 15px; border-radius: 28px; border: 2px solid #334155; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .main-title { font-size: 24px; font-weight: 900; background: linear-gradient(to bottom, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* גודל מאוזן - עד 380 פיקסלים */
+        .app-container { position: relative; background: #111827; padding: 18px; border-radius: 30px; border: 2px solid #334155; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 95vw; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .main-title { font-size: 28px; font-weight: 900; background: linear-gradient(to bottom, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
 
-        #musicBtn { position: absolute; top: 15px; right: 15px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid #475569; background: var(--panel); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; z-index: 10; }
-        .music-on { border-color: var(--success) !important; box-shadow: 0 0 8px var(--success); }
+        #musicBtn { position: absolute; top: 18px; right: 18px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid #475569; background: var(--panel); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; z-index: 10; transition: 0.2s; }
+        .music-on { border-color: var(--success) !important; box-shadow: 0 0 10px var(--success); }
 
-        .top-nav { width: 100%; background: var(--panel); padding: 12px; border-radius: 18px; border: 1px solid #475569; }
-        .lvl-progress-bg { width: 100%; height: 8px; background: #334155; border-radius: 10px; margin-top: 5px; overflow: hidden; }
+        .top-nav { width: 100%; background: var(--panel); padding: 14px; border-radius: 20px; border: 1px solid #475569; }
+        .lvl-progress-bg { width: 100%; height: 8px; background: #334155; border-radius: 10px; margin-top: 6px; overflow: hidden; }
         #lvl-progress-fill { width: 0%; height: 100%; background: var(--accent); transition: 0.5s; }
 
-        #grid { display: grid; grid-template-columns: repeat(8, 34px); gap: 4px; background: #334155; padding: 8px; border-radius: 16px; }
-        .cell { width: 34px; height: 34px; background: var(--bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: 0.1s; }
+        /* לוח משחק בגודל בינוני - 40 פיקסלים לתא */
+        #grid { display: grid; grid-template-columns: repeat(8, 40px); gap: 5px; background: #334155; padding: 8px; border-radius: 18px; justify-content: center; }
+        .cell { width: 40px; height: 40px; background: var(--bg); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: transform 0.1s; }
+        .cell:active { transform: scale(0.9); }
 
-        .action-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 100%; }
-        .btn-act { background: var(--panel); border: 1px solid #475569; border-radius: 12px; height: 45px; font-size: 20px; cursor: pointer; color: white; }
+        .action-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: 100%; }
+        .btn-act { background: var(--panel); border: 1px solid #475569; border-radius: 14px; height: 50px; font-size: 22px; cursor: pointer; color: white; transition: 0.2s; }
+        .btn-act:hover { border-color: var(--accent); background: #2d3a4f; }
 
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: var(--panel); border: 2px solid var(--accent); border-radius: 24px; z-index: 1000; padding: 20px; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90vw; max-width: 350px; background: var(--panel); border: 2px solid var(--accent); border-radius: 26px; z-index: 1000; padding: 22px; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 900; backdrop-filter: blur(4px); }
 
         .list-item { background: #0f172a; padding: 10px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #334155; }
         .city-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .city-sq { position: relative; aspect-ratio: 1; background: #0f172a; border: 1px solid #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
-        .lvl-tag { position: absolute; top: -4px; right: -4px; background: var(--purple); font-size: 8px; padding: 1px 4px; border-radius: 6px; border: 1px solid white; }
+        .city-sq { position: relative; aspect-ratio: 1; background: #0f172a; border: 1px solid #334155; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; }
+        .lvl-tag { position: absolute; top: -4px; right: -4px; background: var(--purple); font-size: 9px; padding: 2px 5px; border-radius: 7px; border: 1px solid white; font-weight: bold; }
         
         .prog-b { width: 100%; height: 6px; background: #334155; border-radius: 3px; margin-top: 5px; }
         .prog-f { height: 100%; background: var(--purple); border-radius: 3px; }
 
-        .copyright-tag { font-size: 10px; color: #64748b; margin-top: 5px; font-weight: 800; border-top: 1px solid #334155; width: 100%; text-align: center; padding-top: 8px; }
+        .copyright-tag { font-size: 11px; color: #64748b; margin-top: 6px; font-weight: 800; border-top: 1px solid #334155; width: 100%; text-align: center; padding-top: 10px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -45,12 +49,12 @@
         <h1 class="main-title">METRO TYCOON</h1>
         
         <div class="top-nav">
-            <div style="display:flex; justify-content:space-between;">
-                <span id="score" style="color:var(--gold); font-weight:800; font-size:20px;">0</span>
-                <span id="level-display" style="color:var(--accent); font-weight:bold;">LVL 1</span>
+            <div style="display:flex; justify-content:space-between; align-items: center;">
+                <span id="score" style="color:var(--gold); font-weight:800; font-size:22px;">0</span>
+                <span id="level-display" style="color:var(--accent); font-weight:bold; font-size:16px;">LVL 1</span>
             </div>
             <div class="lvl-progress-bg"><div id="lvl-progress-fill"></div></div>
-            <div id="income-val" style="font-size:10px; color:var(--success); text-align:center; margin-top:3px;">+0/5s</div>
+            <div id="income-val" style="font-size:12px; color:var(--success); text-align:center; margin-top:4px; font-weight: 600;">+0/5s</div>
         </div>
 
         <div id="grid"></div>
@@ -69,28 +73,28 @@
     <div class="overlay" onclick="closeM()"></div>
 
     <div id="mod-city" class="modal">
-        <h3 style="text-align:center; color:var(--accent); margin-bottom:10px;">ניהול עיר 🏙️</h3>
-        <div id="inv-list" style="display:flex; gap:8px; overflow-x:auto; margin-bottom:10px; padding:8px; background:#111827; border-radius:12px; min-height:50px;"></div>
+        <h3 style="text-align:center; color:var(--accent); margin-bottom:12px;">ניהול עיר 🏙️</h3>
+        <div id="inv-list" style="display:flex; gap:8px; overflow-x:auto; margin-bottom:12px; padding:10px; background:#111827; border-radius:14px; min-height:55px;"></div>
         <div id="city-map" class="city-grid"></div>
-        <button onclick="closeM()" style="width:100%; margin-top:15px; padding:10px; background:var(--danger); border:none; border-radius:12px; color:white;">סגור</button>
+        <button onclick="closeM()" style="width:100%; margin-top:15px; padding:12px; background:var(--danger); border:none; border-radius:14px; color:white; font-weight:bold;">סגור</button>
     </div>
 
     <div id="mod-shop" class="modal">
-        <h3 style="text-align:center; color:var(--success); margin-bottom:10px;">חנות 🛒</h3>
+        <h3 style="text-align:center; color:var(--success); margin-bottom:12px;">חנות 🛒</h3>
         <div id="shop-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
-        <button onclick="closeM()" style="width:100%; margin-top:15px; padding:10px; background:var(--danger); border:none; border-radius:12px; color:white;">סגור</button>
+        <button onclick="closeM()" style="width:100%; margin-top:15px; padding:12px; background:var(--danger); border:none; border-radius:14px; color:white; font-weight:bold;">סגור</button>
     </div>
 
     <div id="mod-miss" class="modal">
-        <h3 style="text-align:center; color:var(--purple); margin-bottom:10px;">משימות 📋</h3>
+        <h3 style="text-align:center; color:var(--purple); margin-bottom:12px;">משימות 📋</h3>
         <div id="m-list"></div>
-        <button onclick="closeM()" style="width:100%; margin-top:10px; padding:10px; background:var(--purple); border-radius:12px; color:white;">חזור</button>
+        <button onclick="closeM()" style="width:100%; margin-top:12px; padding:12px; background:var(--purple); border-radius:14px; color:white; font-weight:bold;">חזור</button>
     </div>
 
     <div id="mod-ach" class="modal">
-        <h3 style="text-align:center; color:var(--gold); margin-bottom:10px;">הישגים 🏆</h3>
+        <h3 style="text-align:center; color:var(--gold); margin-bottom:12px;">הישגים 🏆</h3>
         <div id="a-list"></div>
-        <button onclick="closeM()" style="width:100%; margin-top:10px; padding:10px; background:var(--gold); border-radius:12px;">חזור</button>
+        <button onclick="closeM()" style="width:100%; margin-top:12px; padding:12px; background:var(--gold); border-radius:14px; font-weight:bold;">חזור</button>
     </div>
 
     <audio id="bgMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
@@ -103,11 +107,11 @@
             {e:'🏙️',c:1000, inc:60, n:'גורד שחקים'}, {e:'⚡',c:2500, inc:140, n:'תחנת כוח'}
         ];
 
-        let score = parseInt(localStorage.getItem('mc_v46_score')) || 500;
-        let city = JSON.parse(localStorage.getItem('mc_v46_city')) || Array(16).fill(null);
-        let cityLvls = JSON.parse(localStorage.getItem('mc_v46_lvls')) || Array(16).fill(1);
-        let inv = JSON.parse(localStorage.getItem('mc_v46_inv')) || [];
-        let missions = JSON.parse(localStorage.getItem('mc_v46_miss')) || [
+        let score = parseInt(localStorage.getItem('mc_v47_score')) || 500;
+        let city = JSON.parse(localStorage.getItem('mc_v47_city')) || Array(16).fill(null);
+        let cityLvls = JSON.parse(localStorage.getItem('mc_v47_lvls')) || Array(16).fill(1);
+        let inv = JSON.parse(localStorage.getItem('mc_v47_inv')) || [];
+        let missions = JSON.parse(localStorage.getItem('mc_v47_miss')) || [
             {t:"אסוף 50 יהלומים 💎", g:50, p:0, r:200, type:'💎'},
             {t:"פוצץ 100 פריטים", g:100, p:0, r:300, type:'any'}
         ];
@@ -176,7 +180,7 @@
                     } else if(city[i]) {
                         const bData = builds.find(b => b.e === city[i]);
                         const upC = bData.c * cityLvls[i];
-                        if(confirm(`שדרוג ${bData.n} לרמה ${cityLvls[i]+1} ב-${upC}💰?\n(ביטול למכירה ב-${Math.floor(bData.c/2)}💰)`)) {
+                        if(confirm(`שדרוג לרמה ${cityLvls[i]+1} ב-${upC}💰?\n(ביטול למכירה ב-${Math.floor(bData.c/2)}💰)`)) {
                             if(score >= upC) { score -= upC; cityLvls[i]++; updateStats(); renderCity(); }
                             else { alert("אין מספיק כסף!"); }
                         } else if(confirm("למכור את המבנה?")) {
@@ -192,8 +196,8 @@
             const l = document.getElementById('shop-list'); l.innerHTML = '';
             builds.forEach(b => {
                 l.innerHTML += `<div class="list-item" style="text-align:center;">
-                    <div style="font-size:20px;">${b.e}</div><div>${b.n}</div>
-                    <button onclick="buy('${b.e}',${b.c})" style="width:100%; background:var(--success); border:none; border-radius:8px; color:white; padding:5px; margin-top:5px; cursor:pointer;">${b.c}💰</button>
+                    <div style="font-size:24px;">${b.e}</div><div style="font-weight:600; font-size:12px;">${b.n}</div>
+                    <button onclick="buy('${b.e}',${b.c})" style="width:100%; background:var(--success); border:none; border-radius:10px; color:white; padding:6px; margin-top:6px; cursor:pointer; font-weight:bold; font-size:12px;">${b.c}💰</button>
                 </div>`;
             });
         }
@@ -203,7 +207,7 @@
             missions.forEach(m => {
                 const p = Math.min((m.p/m.g)*100, 100);
                 l.innerHTML += `<div class="list-item">
-                    <div style="display:flex; justify-content:space-between; font-size:12px;"><span>${m.t}</span><span>${m.r}💰</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;"><span>${m.t}</span><span>${m.r}💰</span></div>
                     <div class="prog-b"><div class="prog-f" style="width:${p}%"></div></div>
                 </div>`;
             });
@@ -211,11 +215,11 @@
 
         function renderAchievements() {
             const l = document.getElementById('a-list'); l.innerHTML = '';
-            const achs = [{t:'מתעשר', d:'5000 זהב', v:5000}, {t:'בונה', d:'10 מבנים', v:10}];
+            const achs = [{t:'מתעשר', d:'צבור 5000 זהב', v:5000}, {t:'בונה', d:'10 מבנים', v:10}];
             achs.forEach(a => {
                 const done = (a.t==='מתעשר' ? score >= 5000 : city.filter(x=>x).length >= 10);
-                l.innerHTML += `<div class="list-item" style="border-color:${done?'var(--success)':'#334155'}">
-                    <div style="font-weight:bold;">${a.t} ${done?'✅':''}</div><div style="font-size:10px;">${a.d}</div>
+                l.innerHTML += `<div class="list-item" style="border-color:${done?'var(--success)':'#334155'}; background:${done?'#064e3b':'#0f172a'}">
+                    <div style="font-weight:bold;">${a.t} ${done?'✅':''}</div><div style="font-size:11px;">${a.d}</div>
                 </div>`;
             });
         }
@@ -224,7 +228,7 @@
 
         function clickCell(i) {
             if(animating) return;
-            if(selected === null) { selected = i; squares[i].style.background = "#334155"; }
+            if(selected === null) { selected = i; squares[i].style.background = "#334155"; squares[i].style.transform="scale(1.1)"; }
             else {
                 let s1 = selected, s2 = i;
                 if([s1-1, s1+1, s1-8, s1+8].includes(s2)) {
@@ -232,7 +236,7 @@
                     squares[s1].innerText = v2; squares[s2].innerText = v1;
                     if(!checkMatch()) { setTimeout(() => { squares[s1].innerText = v1; squares[s2].innerText = v2; }, 200); }
                 }
-                squares[selected].style.background = "var(--bg)"; selected = null;
+                squares[selected].style.background = "var(--bg)"; squares[selected].style.transform="scale(1)"; selected = null;
             }
         }
 
@@ -282,13 +286,13 @@
         }
         function closeM() { document.querySelectorAll('.modal, .overlay').forEach(el=>el.style.display='none'); buildSel = null; }
         function save() {
-            localStorage.setItem('mc_v46_score', score);
-            localStorage.setItem('mc_v46_city', JSON.stringify(city));
-            localStorage.setItem('mc_v46_lvls', JSON.stringify(cityLvls));
-            localStorage.setItem('mc_v46_inv', JSON.stringify(inv));
-            localStorage.setItem('mc_v46_miss', JSON.stringify(missions));
+            localStorage.setItem('mc_v47_score', score);
+            localStorage.setItem('mc_v47_city', JSON.stringify(city));
+            localStorage.setItem('mc_v47_lvls', JSON.stringify(cityLvls));
+            localStorage.setItem('mc_v47_inv', JSON.stringify(inv));
+            localStorage.setItem('mc_v47_miss', JSON.stringify(missions));
         }
-        function claimGift() { score += 500; updateStats(); alert("קיבלת 500💰!"); }
+        function claimGift() { score += 500; updateStats(); alert("קיבלת מענק: 500💰!"); }
         init();
     </script>
 </body>
