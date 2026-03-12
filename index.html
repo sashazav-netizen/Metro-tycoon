@@ -2,59 +2,59 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>METRO TYCOON v47 - BALANCED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METRO TYCOON v60.1</title>
     <style>
         :root { --bg: #0f172a; --panel: #1e293b; --accent: #38bdf8; --gold: #fbbf24; --success: #22c55e; --danger: #f43f5e; --purple: #8b5cf6; }
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body { background: var(--bg); color: white; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; touch-action: manipulation; }
+        body { background: var(--bg); color: white; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
 
-        /* גודל מאוזן - עד 380 פיקסלים */
-        .app-container { position: relative; background: #111827; padding: 18px; border-radius: 30px; border: 2px solid #334155; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 95vw; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .main-title { font-size: 28px; font-weight: 900; background: linear-gradient(to bottom, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .app-container { position: relative; background: #111827; padding: 15px; border-radius: 28px; border: 2px solid #334155; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .main-title { font-size: 24px; font-weight: 900; background: linear-gradient(to bottom, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        #musicBtn { position: absolute; top: 18px; right: 18px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid #475569; background: var(--panel); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; z-index: 10; transition: 0.2s; }
-        .music-on { border-color: var(--success) !important; box-shadow: 0 0 10px var(--success); }
+        /* Stats Header */
+        .top-nav { width: 100%; background: var(--panel); padding: 12px; border-radius: 18px; border: 1px solid #475569; }
+        .lvl-progress-bg { width: 100%; height: 8px; background: #334155; border-radius: 10px; margin-top: 5px; overflow: hidden; }
+        #lvl-progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.4s; }
 
-        .top-nav { width: 100%; background: var(--panel); padding: 14px; border-radius: 20px; border: 1px solid #475569; }
-        .lvl-progress-bg { width: 100%; height: 8px; background: #334155; border-radius: 10px; margin-top: 6px; overflow: hidden; }
-        #lvl-progress-fill { width: 0%; height: 100%; background: var(--accent); transition: 0.5s; }
-
-        /* לוח משחק בגודל בינוני - 40 פיקסלים לתא */
-        #grid { display: grid; grid-template-columns: repeat(8, 40px); gap: 5px; background: #334155; padding: 8px; border-radius: 18px; justify-content: center; }
-        .cell { width: 40px; height: 40px; background: var(--bg); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: transform 0.1s; }
+        /* Game Grid */
+        #grid { display: grid; grid-template-columns: repeat(8, 34px); gap: 4px; background: #334155; padding: 8px; border-radius: 16px; }
+        .cell { width: 34px; height: 34px; background: var(--bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: transform 0.1s; }
         .cell:active { transform: scale(0.9); }
+        
+        /* Navigation */
+        .action-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 100%; }
+        .btn-act { background: var(--panel); border: 1px solid #475569; border-radius: 12px; height: 45px; font-size: 20px; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; position: relative; }
 
-        .action-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: 100%; }
-        .btn-act { background: var(--panel); border: 1px solid #475569; border-radius: 14px; height: 50px; font-size: 22px; cursor: pointer; color: white; transition: 0.2s; }
-        .btn-act:hover { border-color: var(--accent); background: #2d3a4f; }
-
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90vw; max-width: 350px; background: var(--panel); border: 2px solid var(--accent); border-radius: 26px; z-index: 1000; padding: 22px; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+        /* Modals */
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: var(--panel); border: 2px solid var(--accent); border-radius: 24px; z-index: 1000; padding: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.9); max-height: 80vh; overflow-y: auto; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 900; backdrop-filter: blur(4px); }
 
-        .list-item { background: #0f172a; padding: 10px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #334155; }
-        .city-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .city-sq { position: relative; aspect-ratio: 1; background: #0f172a; border: 1px solid #334155; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; }
-        .lvl-tag { position: absolute; top: -4px; right: -4px; background: var(--purple); font-size: 9px; padding: 2px 5px; border-radius: 7px; border: 1px solid white; font-weight: bold; }
+        .list-item { background: #0f172a; padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #334155; }
+        .inv-slot { width: 50px; height: 50px; background: #1e293b; border: 2px solid #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; flex-shrink: 0; }
+        .inv-selected { border-color: var(--accent); box-shadow: 0 0 10px var(--accent); }
         
-        .prog-b { width: 100%; height: 6px; background: #334155; border-radius: 3px; margin-top: 5px; }
-        .prog-f { height: 100%; background: var(--purple); border-radius: 3px; }
+        .city-sq { position: relative; aspect-ratio: 1; background: #0f172a; border: 1px solid #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
+        .b-lvl { position: absolute; top: -3px; right: -3px; background: var(--purple); color: white; font-size: 9px; font-weight: 900; padding: 2px 4px; border-radius: 6px; border: 1px solid white; }
 
-        .copyright-tag { font-size: 11px; color: #64748b; margin-top: 6px; font-weight: 800; border-top: 1px solid #334155; width: 100%; text-align: center; padding-top: 10px; letter-spacing: 1px; }
+        .mission-card { background: #111827; padding: 10px; border-radius: 12px; margin-bottom: 8px; border-left: 4px solid var(--purple); }
+        .mission-ready { border-left-color: var(--success); background: rgba(34, 197, 94, 0.05); }
+
+        .copyright-tag { font-size: 10px; color: #64748b; margin-top: 10px; font-weight: 800; text-align: center; border-top: 1px solid #334155; padding-top: 5px; width: 100%; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <button id="musicBtn" onclick="toggleMusic()">🎵</button>
         <h1 class="main-title">METRO TYCOON</h1>
         
         <div class="top-nav">
-            <div style="display:flex; justify-content:space-between; align-items: center;">
-                <span id="score" style="color:var(--gold); font-weight:800; font-size:22px;">0</span>
-                <span id="level-display" style="color:var(--accent); font-weight:bold; font-size:16px;">LVL 1</span>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span id="score" style="color:var(--gold); font-weight:800; font-size:20px;">0</span>
+                <span id="level-display" style="color:var(--accent); font-weight:bold;">LVL 1</span>
             </div>
             <div class="lvl-progress-bg"><div id="lvl-progress-fill"></div></div>
-            <div id="income-val" style="font-size:12px; color:var(--success); text-align:center; margin-top:4px; font-weight: 600;">+0/5s</div>
+            <div id="income-val" style="font-size:10px; color:var(--success); text-align:center; margin-top:3px;">+0/5s</div>
         </div>
 
         <div id="grid"></div>
@@ -62,129 +62,124 @@
         <div class="action-grid">
             <button class="btn-act" onclick="openM('shop')">🛒</button>
             <button class="btn-act" onclick="openM('city')">🏙️</button>
-            <button class="btn-act" onclick="openM('miss')">📋</button>
+            <button class="btn-act" onclick="openM('miss')">📋<div id="miss-notify" style="position:absolute; top:2px; right:2px; background:var(--danger); width:8px; height:8px; border-radius:50%; display:none;"></div></button>
             <button class="btn-act" onclick="openM('ach')">🏆</button>
-            <button class="btn-act" onclick="claimGift()">🎁</button>
+            <button class="btn-act" onclick="openM('gift')">🎁</button>
         </div>
 
-        <div class="copyright-tag">ALEXANDER ZAVODISKER</div>
+        <div class="copyright-tag">ALEXANDER ZABODISKER</div>
     </div>
 
     <div class="overlay" onclick="closeM()"></div>
 
+    <div id="mod-gift" class="modal">
+        <h3 style="text-align:center;">מתנה 🎁</h3>
+        <div id="gift-timer-text" style="text-align:center; margin: 20px 0; font-weight:bold;"></div>
+        <button id="gift-claim-btn" style="width:100%; padding:15px; background:var(--success); color:white; border:none; border-radius:12px; font-weight:bold;" onclick="collectGift()">אסוף 500💰</button>
+        <button onclick="closeM()" style="width:100%; margin-top:10px; background:transparent; border:none; color:#64748b;">סגור</button>
+    </div>
+
     <div id="mod-city" class="modal">
-        <h3 style="text-align:center; color:var(--accent); margin-bottom:12px;">ניהול עיר 🏙️</h3>
-        <div id="inv-list" style="display:flex; gap:8px; overflow-x:auto; margin-bottom:12px; padding:10px; background:#111827; border-radius:14px; min-height:55px;"></div>
-        <div id="city-map" class="city-grid"></div>
-        <button onclick="closeM()" style="width:100%; margin-top:15px; padding:12px; background:var(--danger); border:none; border-radius:14px; color:white; font-weight:bold;">סגור</button>
+        <h3 style="text-align:center; color:var(--accent);">ניהול עיר 🏙️</h3>
+        <div id="inv-list" style="display:flex; gap:10px; overflow-x:auto; padding:15px; background:#111827; border-radius:12px; margin:10px 0; min-height:80px; border:1px solid #334155;"></div>
+        <div id="city-map" style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;"></div>
+        <button onclick="closeM()" style="width:100%; margin-top:15px; padding:10px; background:var(--danger); border:none; border-radius:12px; color:white;">סגור</button>
     </div>
 
     <div id="mod-shop" class="modal">
-        <h3 style="text-align:center; color:var(--success); margin-bottom:12px;">חנות 🛒</h3>
+        <h3 style="text-align:center; color:var(--success); margin-bottom:10px;">חנות מבנים 🛒</h3>
         <div id="shop-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
-        <button onclick="closeM()" style="width:100%; margin-top:15px; padding:12px; background:var(--danger); border:none; border-radius:14px; color:white; font-weight:bold;">סגור</button>
+        <button onclick="closeM()" style="width:100%; margin-top:15px; padding:10px; background:var(--danger); border:none; border-radius:12px; color:white;">סגור</button>
     </div>
 
     <div id="mod-miss" class="modal">
-        <h3 style="text-align:center; color:var(--purple); margin-bottom:12px;">משימות 📋</h3>
+        <h3 style="text-align:center; color:var(--purple); margin-bottom:15px;">משימות (5/5) 📋</h3>
         <div id="m-list"></div>
-        <button onclick="closeM()" style="width:100%; margin-top:12px; padding:12px; background:var(--purple); border-radius:14px; color:white; font-weight:bold;">חזור</button>
+        <button onclick="closeM()" style="width:100%; margin-top:10px; padding:10px; background:var(--purple); color:white; border-radius:12px; border:none;">חזור</button>
     </div>
 
     <div id="mod-ach" class="modal">
-        <h3 style="text-align:center; color:var(--gold); margin-bottom:12px;">הישגים 🏆</h3>
-        <div id="a-list"></div>
-        <button onclick="closeM()" style="width:100%; margin-top:12px; padding:12px; background:var(--gold); border-radius:14px; font-weight:bold;">חזור</button>
+        <h3 style="text-align:center; color:var(--gold);">הישגים 🏆</h3>
+        <div id="ach-list" style="margin-top:10px;"></div>
+        <button onclick="closeM()" style="width:100%; margin-top:10px; padding:10px; background:var(--gold); border:none; border-radius:12px; color:black; font-weight:bold;">חזור</button>
     </div>
-
-    <audio id="bgMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
 
     <script>
         const types = ['💎', '💰', '🔥', '🧱', '🌲'];
         const builds = [
-            {e:'🏠',c:50, inc:2, n:'בית'}, {e:'🌳',c:30, inc:1, n:'גינה'},
-            {e:'🛒',c:120, inc:6, n:'סופר'}, {e:'🏭',c:450, inc:25, n:'מפעל'},
-            {e:'🏙️',c:1000, inc:60, n:'גורד שחקים'}, {e:'⚡',c:2500, inc:140, n:'תחנת כוח'}
+            {e:'🏠',c:50, inc:5, n:'בית'}, {e:'🌳',c:30, inc:2, n:'פארק'},
+            {e:'🛒',c:150, inc:15, n:'סופר'}, {e:'🏭',c:500, inc:50, n:'מפעל'},
+            {e:'🏙️',c:1200, inc:130, n:'מגדל'}, {e:'🏥',c:800, inc:80, n:'חולים'},
+            {e:'🏫',c:300, inc:30, n:'ביה"ס'}, {e:'🏟️',c:2000, inc:250, n:'אצטדיון'},
+            {e:'🍕',c:200, inc:25, n:'פיצה'}, {e:'🏦',c:1500, inc:180, n:'בנק'}
         ];
 
-        let score = parseInt(localStorage.getItem('mc_v47_score')) || 500;
-        let city = JSON.parse(localStorage.getItem('mc_v47_city')) || Array(16).fill(null);
-        let cityLvls = JSON.parse(localStorage.getItem('mc_v47_lvls')) || Array(16).fill(1);
-        let inv = JSON.parse(localStorage.getItem('mc_v47_inv')) || [];
-        let missions = JSON.parse(localStorage.getItem('mc_v47_miss')) || [
-            {t:"אסוף 50 יהלומים 💎", g:50, p:0, r:200, type:'💎'},
-            {t:"פוצץ 100 פריטים", g:100, p:0, r:300, type:'any'}
-        ];
+        let score = parseInt(localStorage.getItem('mt_v60_score')) || 500;
+        let city = JSON.parse(localStorage.getItem('mt_v60_city')) || Array(16).fill(null);
+        let cityLvls = JSON.parse(localStorage.getItem('mt_v60_lvls')) || Array(16).fill(1);
+        let inv = JSON.parse(localStorage.getItem('mt_v60_inv')) || [];
+        let missions = JSON.parse(localStorage.getItem('mt_v60_miss'));
+        
+        if(!missions || missions.length < 5) {
+            missions = [];
+            for(let i=0; i<5; i++) missions.push(generateMission());
+        }
 
-        let squares = [], selected = null, animating = false, buildSel = null, isMusicPlaying = false;
+        let lastGift = parseInt(localStorage.getItem('mt_v60_gift_t')) || 0;
+        let squares = [], selected = null, isAnimating = false, buildSel = null;
+
+        function generateMission() {
+            const type = types[Math.floor(Math.random()*5)];
+            const goal = Math.floor(Math.random()*30) + 30;
+            return { t: `אסוף ${goal} מ-${type}`, g: goal, p: 0, r: goal*5, type: type };
+        }
 
         function init() {
-            const g = document.getElementById('grid');
-            g.innerHTML = ''; squares = [];
+            const g = document.getElementById('grid'); g.innerHTML = '';
             for(let i=0; i<64; i++){
                 const s = document.createElement('div'); s.className = 'cell';
                 s.innerText = types[Math.floor(Math.random()*5)];
                 s.onclick = () => clickCell(i);
                 g.appendChild(s); squares.push(s);
             }
-            updateStats();
-            setInterval(loop, 150);
-            setInterval(collectInc, 5000);
+            updateStats(); gameLoop();
+            setInterval(updateGiftUI, 1000);
+            setInterval(() => { score += calculateIncome(); updateStats(); }, 5000);
         }
 
-        function toggleMusic() {
-            const a = document.getElementById('bgMusic');
-            const btn = document.getElementById('musicBtn');
-            if(!isMusicPlaying) {
-                a.play().catch(() => {}); isMusicPlaying = true;
-                btn.classList.add('music-on'); btn.innerText = '🔇';
-            } else {
-                a.pause(); isMusicPlaying = false;
-                btn.classList.remove('music-on'); btn.innerText = '🎵';
-            }
+        function updateGiftUI() {
+            const rem = Math.ceil((60000 - (Date.now() - lastGift)) / 1000);
+            const btn = document.getElementById('gift-claim-btn');
+            const txt = document.getElementById('gift-timer-text');
+            if (rem > 0) { btn.style.display = 'none'; txt.innerText = `זמין בעוד: ${rem} ש'`; txt.style.color = "var(--danger)"; }
+            else { btn.style.display = 'block'; txt.innerText = "מוכן לאיסוף!"; txt.style.color = "var(--success)"; }
         }
 
-        function updateStats() {
-            document.getElementById('score').innerText = score;
-            const level = Math.floor(score / 2000) + 1;
-            document.getElementById('level-display').innerText = `LVL ${level}`;
-            document.getElementById('lvl-progress-fill').style.width = ((score % 2000) / 20) + "%";
-            let ti = 0;
-            city.forEach((s, i) => { if(s) { const b = builds.find(x => x.e === s); if(b) ti += (b.inc * cityLvls[i]); } });
-            document.getElementById('income-val').innerText = `+${ti}/5s`;
-            save();
-        }
-
-        function collectInc() {
-            let ti = 0;
-            city.forEach((s, i) => { if(s) { const b = builds.find(x => x.e === s); if(b) ti += (b.inc * cityLvls[i]); } });
-            if(ti > 0) { score += ti; updateStats(); }
-        }
+        function collectGift() { score += 500; lastGift = Date.now(); updateStats(); closeM(); }
 
         function renderCity() {
             const il = document.getElementById('inv-list'); il.innerHTML = '';
             inv.forEach((e, i) => {
-                const d = document.createElement('div'); d.className = 'cell'; d.innerText = e;
-                d.style.border = buildSel === i ? "2px solid white" : "1px solid #444";
-                d.onclick = () => { buildSel = i; renderCity(); };
+                const d = document.createElement('div'); d.className = `inv-slot ${buildSel === i ? 'inv-selected' : ''}`;
+                d.innerText = e; d.onclick = () => { buildSel = i; renderCity(); };
                 il.appendChild(d);
             });
             const m = document.getElementById('city-map'); m.innerHTML = '';
             city.forEach((e, i) => {
                 const s = document.createElement('div'); s.className = 'city-sq';
-                s.innerHTML = (e || '') + (e ? `<span class="lvl-tag">L${cityLvls[i]}</span>` : '');
+                s.innerHTML = e ? `${e}<div class="b-lvl">L${cityLvls[i]}</div>` : '';
                 s.onclick = () => {
                     if(buildSel !== null && !city[i]) {
                         city[i] = inv[buildSel]; cityLvls[i] = 1; inv.splice(buildSel, 1); buildSel = null;
                         renderCity(); updateStats();
                     } else if(city[i]) {
                         const bData = builds.find(b => b.e === city[i]);
-                        const upC = bData.c * cityLvls[i];
-                        if(confirm(`שדרוג לרמה ${cityLvls[i]+1} ב-${upC}💰?\n(ביטול למכירה ב-${Math.floor(bData.c/2)}💰)`)) {
-                            if(score >= upC) { score -= upC; cityLvls[i]++; updateStats(); renderCity(); }
-                            else { alert("אין מספיק כסף!"); }
+                        const cost = Math.floor(bData.c * 1.5 * cityLvls[i]);
+                        if(confirm(`שדרוג לרמה ${cityLvls[i]+1} עולה ${cost}💰\n(ביטול למכירה)`)) {
+                            if(score >= cost) { score -= cost; cityLvls[i]++; updateStats(); renderCity(); }
+                            else alert("אין מספיק כסף!");
                         } else if(confirm("למכור את המבנה?")) {
-                            score += Math.floor(bData.c/2); city[i] = null; cityLvls[i] = 1; renderCity(); updateStats();
+                            city[i] = null; score += Math.floor(bData.c/2); updateStats(); renderCity();
                         }
                     }
                 };
@@ -196,103 +191,122 @@
             const l = document.getElementById('shop-list'); l.innerHTML = '';
             builds.forEach(b => {
                 l.innerHTML += `<div class="list-item" style="text-align:center;">
-                    <div style="font-size:24px;">${b.e}</div><div style="font-weight:600; font-size:12px;">${b.n}</div>
-                    <button onclick="buy('${b.e}',${b.c})" style="width:100%; background:var(--success); border:none; border-radius:10px; color:white; padding:6px; margin-top:6px; cursor:pointer; font-weight:bold; font-size:12px;">${b.c}💰</button>
+                    <div style="font-size:30px;">${b.e}</div><b style="font-size:12px;">${b.n}</b><br>
+                    <button onclick="buy('${b.e}',${b.c})" style="width:100%; margin-top:8px; background:var(--success); border:none; border-radius:8px; color:white; padding:6px; font-weight:bold;">${b.c}💰</button>
                 </div>`;
             });
         }
 
+        function buy(e, c) { if(score >= c) { score -= c; inv.push(e); updateStats(); openM('city'); } else alert("אין כסף!"); }
+
         function renderMissions() {
             const l = document.getElementById('m-list'); l.innerHTML = '';
-            missions.forEach(m => {
+            missions.forEach((m, i) => {
                 const p = Math.min((m.p/m.g)*100, 100);
-                l.innerHTML += `<div class="list-item">
-                    <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;"><span>${m.t}</span><span>${m.r}💰</span></div>
-                    <div class="prog-b"><div class="prog-f" style="width:${p}%"></div></div>
+                l.innerHTML += `<div class="mission-card ${m.p>=m.g?'mission-ready':''}">
+                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><b>${m.t}</b> <span>${m.r}💰</span></div>
+                    <div class="lvl-progress-bg"><div style="width:${p}%; background:var(--purple); height:100%;"></div></div>
+                    ${m.p>=m.g ? `<button onclick="claimMiss(${i})" style="width:100%; margin-top:8px; background:var(--success); color:white; border:none; border-radius:8px; padding:5px;">קבל פרס</button>` : ''}
                 </div>`;
             });
         }
 
         function renderAchievements() {
-            const l = document.getElementById('a-list'); l.innerHTML = '';
-            const achs = [{t:'מתעשר', d:'צבור 5000 זהב', v:5000}, {t:'בונה', d:'10 מבנים', v:10}];
+            const l = document.getElementById('ach-list'); l.innerHTML = '';
+            const achs = [
+                { t: "אדריכל מתחיל", d: "בנה 5 מבנים בעיר", c: city.filter(x => x).length >= 5 },
+                { t: "משדרג מקצועי", d: "שדרג מבנה לרמה 3", c: cityLvls.some(lvl => lvl >= 3) },
+                { t: "איש עסקים", d: "צבור 5,000💰", c: score >= 5000 },
+                { t: "מטרופולון", d: "מלא את כל 16 המשבצות בעיר", c: city.filter(x => x).length >= 16 },
+                { t: "מיליונר", d: "צבור 10,000💰", c: score >= 10000 }
+            ];
             achs.forEach(a => {
-                const done = (a.t==='מתעשר' ? score >= 5000 : city.filter(x=>x).length >= 10);
-                l.innerHTML += `<div class="list-item" style="border-color:${done?'var(--success)':'#334155'}; background:${done?'#064e3b':'#0f172a'}">
-                    <div style="font-weight:bold;">${a.t} ${done?'✅':''}</div><div style="font-size:11px;">${a.d}</div>
+                l.innerHTML += `<div class="list-item" style="border-right: 4px solid ${a.c ? 'var(--success)' : '#334155'}; opacity: ${a.c ? '1' : '0.6'};">
+                    <b>${a.t} ${a.c ? '✅' : '🔒'}</b><br><small>${a.d}</small>
                 </div>`;
             });
         }
 
-        function buy(e, c) { if(score >= c) { score -= c; inv.push(e); updateStats(); openM('city'); } }
+        function claimMiss(i) { score += missions[i].r; missions[i] = generateMission(); updateStats(); renderMissions(); }
+
+        async function gameLoop() {
+            if (!isAnimating) {
+                let m = findMatches();
+                if (m.length > 0) {
+                    isAnimating = true;
+                    [...new Set(m.map(x=>x.idx))].forEach(idx => {
+                        let c = squares[idx].innerText;
+                        missions.forEach(miss => { if(miss.type === c) miss.p++; });
+                        squares[idx].innerText = ''; score += 5;
+                    });
+                    await new Promise(r => setTimeout(r, 200));
+                    updateStats(); isAnimating = false;
+                } else if (squares.some(s => s.innerText === '')) {
+                    isAnimating = true;
+                    for(let i=55; i>=0; i--) if(squares[i+8].innerText==='' && squares[i].innerText!=='') { squares[i+8].innerText=squares[i].innerText; squares[i].innerText=''; }
+                    for(let i=0; i<8; i++) if(squares[i].innerText==='') squares[i].innerText=types[Math.floor(Math.random()*5)];
+                    await new Promise(r => setTimeout(r, 100));
+                    isAnimating = false;
+                }
+            }
+            setTimeout(gameLoop, 100);
+        }
+
+        function findMatches() {
+            let m = [];
+            for(let i=0; i<64; i++) {
+                let c = squares[i].innerText; if(!c) continue;
+                if(i%8<6 && squares[i+1].innerText===c && squares[i+2].innerText===c) for(let j=0; j<3; j++) m.push({idx:i+j});
+                if(i<48 && squares[i+8].innerText===c && squares[i+16].innerText===c) for(let j=0; j<3; j++) m.push({idx:i+(j*8)});
+            }
+            return m;
+        }
 
         function clickCell(i) {
-            if(animating) return;
-            if(selected === null) { selected = i; squares[i].style.background = "#334155"; squares[i].style.transform="scale(1.1)"; }
+            if(isAnimating) return;
+            if(selected === null) { selected = i; squares[i].style.background = "#334155"; }
             else {
                 let s1 = selected, s2 = i;
                 if([s1-1, s1+1, s1-8, s1+8].includes(s2)) {
                     let v1 = squares[s1].innerText, v2 = squares[s2].innerText;
                     squares[s1].innerText = v2; squares[s2].innerText = v1;
-                    if(!checkMatch()) { setTimeout(() => { squares[s1].innerText = v1; squares[s2].innerText = v2; }, 200); }
                 }
-                squares[selected].style.background = "var(--bg)"; squares[selected].style.transform="scale(1)"; selected = null;
+                squares[selected].style.background = "var(--bg)"; selected = null;
             }
         }
 
-        function checkMatch() {
-            let m = [];
-            for(let i=0; i<64; i++) {
-                let c = squares[i].innerText; if(!c) continue;
-                if(i%8<6 && squares[i+1].innerText===c && squares[i+2].innerText===c) m.push(i, i+1, i+2);
-                if(i<48 && squares[i+8].innerText===c && squares[i+16].innerText===c) m.push(i, i+8, i+16);
-            }
-            return m.length > 0;
+        function calculateIncome() {
+            let ti = 0; city.forEach((s, i) => { if(s) { const b = builds.find(x => x.e === s); if(b) ti += (b.inc * cityLvls[i]); } });
+            return ti;
         }
 
-        function loop() {
-            if(animating) return;
-            let m = [];
-            for(let i=0; i<64; i++) {
-                let c = squares[i].innerText; if(!c) continue;
-                if(i%8<6 && squares[i+1].innerText===c && squares[i+2].innerText===c) m.push(i, i+1, i+2);
-                if(i<48 && squares[i+8].innerText===c && squares[i+16].innerText===c) m.push(i, i+8, i+16);
-            }
-            if(m.length > 0) {
-                animating = true;
-                const u = [...new Set(m)];
-                u.forEach(idx => {
-                    missions.forEach(miss => { if(miss.type === 'any' || miss.type === squares[idx].innerText) miss.p++; });
-                    squares[idx].style.transform = "scale(0)";
-                    score += 5;
-                });
-                setTimeout(() => {
-                    u.forEach(idx => { squares[idx].innerText = ''; squares[idx].style.transform = "scale(1)"; });
-                    animating = false; updateStats();
-                }, 300);
-            }
-            for(let i=55; i>=0; i--) if(squares[i+8].innerText==='' && squares[i].innerText!==''){ squares[i+8].innerText=squares[i].innerText; squares[i].innerText=''; }
-            for(let i=0; i<8; i++) if(squares[i].innerText==='') squares[i].innerText=types[Math.floor(Math.random()*5)];
+        function updateStats() {
+            document.getElementById('score').innerText = score;
+            document.getElementById('level-display').innerText = `LVL ${Math.floor(score/2000)+1}`;
+            document.getElementById('lvl-progress-fill').style.width = (score%2000)/20 + "%";
+            document.getElementById('income-val').innerText = `+${calculateIncome()}/5s`;
+            document.getElementById('miss-notify').style.display = missions.some(m => m.p >= m.g) ? 'block' : 'none';
+            save();
+        }
+
+        function save() {
+            localStorage.setItem('mt_v60_score', score);
+            localStorage.setItem('mt_v60_city', JSON.stringify(city));
+            localStorage.setItem('mt_v60_lvls', JSON.stringify(cityLvls));
+            localStorage.setItem('mt_v60_inv', JSON.stringify(inv));
+            localStorage.setItem('mt_v60_gift_t', lastGift);
+            localStorage.setItem('mt_v60_miss', JSON.stringify(missions));
         }
 
         function openM(t) {
             document.querySelectorAll('.modal, .overlay').forEach(el=>el.style.display='none');
             document.querySelector('.overlay').style.display='block';
             document.getElementById('mod-'+t).style.display='block';
-            if(t==='city') renderCity();
-            if(t==='shop') renderShop();
-            if(t==='miss') renderMissions();
-            if(t==='ach') renderAchievements();
+            if(t==='city') renderCity(); if(t==='shop') renderShop(); if(t==='miss') renderMissions(); if(t==='ach') renderAchievements();
         }
+
         function closeM() { document.querySelectorAll('.modal, .overlay').forEach(el=>el.style.display='none'); buildSel = null; }
-        function save() {
-            localStorage.setItem('mc_v47_score', score);
-            localStorage.setItem('mc_v47_city', JSON.stringify(city));
-            localStorage.setItem('mc_v47_lvls', JSON.stringify(cityLvls));
-            localStorage.setItem('mc_v47_inv', JSON.stringify(inv));
-            localStorage.setItem('mc_v47_miss', JSON.stringify(missions));
-        }
-        function claimGift() { score += 500; updateStats(); alert("קיבלת מענק: 500💰!"); }
+
         init();
     </script>
 </body>
